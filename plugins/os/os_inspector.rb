@@ -57,7 +57,8 @@ class OsInspector < Inspector
   end
 
   def summary
-    summary_string = "Found operating system '#{@description.os.name}' version '#{@description.os.version}'."
+    summary_string = "Found operating system '#{@description.os.name}'" \
+      " version '#{@description.os.version}'."
     if @system.is_a?(DockerSystem)
       summary_string += "\n -> Inspected system is a docker container."
     end

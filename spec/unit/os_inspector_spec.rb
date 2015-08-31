@@ -216,7 +216,9 @@ describe OsInspector do
       expect_any_instance_of(DockerSystem).to receive(:check_host)
       expect_any_instance_of(DockerSystem).to receive(:check_if_container_is_running)
       expect_any_instance_of(DockerSystem).to receive(:arch).and_return("i586")
-      expect_any_instance_of(OsInspector).to receive(:get_os).and_return(Os.for("openSUSE 13.2 (Harlequin)"))
+      expect_any_instance_of(OsInspector).to receive(:get_os).and_return(
+        Os.for("openSUSE 13.2 (Harlequin)")
+      )
       OsInspector.new(DockerSystem.new("c1234"), description).inspect(filter)
       expect(description["os"]["container_type"]).to eq("docker")
     end
