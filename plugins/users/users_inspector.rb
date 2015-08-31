@@ -27,7 +27,7 @@ class UsersInspector < Inspector
     passwd = @system.read_file("/etc/passwd")
     begin
       shadow = @system.read_file("/etc/shadow")
-    rescue => e
+    rescue
     end
     users = passwd ? parse_users(passwd, shadow) : []
 
