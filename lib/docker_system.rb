@@ -43,13 +43,11 @@ class DockerSystem < System
     all_containers = Cheetah.run("docker", "ps", "-a", stdout: :capture)
     all_containers.each_line do |container|
       lines << container.split(" ")
-      if container.start_with?(@container)
-        if container.split(" ").include?("Exited")
-          raise Machinery::Errors::InspectionFailed.new(
-            "Container is not running currently. Start container before the" \
-            " inspection by running:\n`docker start #{@container}`"
-          )
-        end
+      if container.start_with?(@container) && container.split(" ").include?("Exited")
+        raise Machinery::Errors::InspectionFailed.new(
+          "Container is not running currently. Start container before the" \
+          " inspection by running:\n`docker start #{@container}`"
+        )
       end
     end
   end
