@@ -67,7 +67,7 @@ EOF
       allow_any_instance_of(DockerSystem).to receive(:check_host)
       allow_any_instance_of(DockerSystem).to receive(:check_if_container_is_running)
       system = DockerSystem.new("c311f5336878")
-      expect(LoggedCheetah).to receive(:run).with("docker", "exec", "c311f5336878", "bash", "-c", "bash -c python", stdin: "my stdin", stdout: :capture)
+      expect(LoggedCheetah).to receive(:run).with("docker", "exec", "-i", "c311f5336878", "bash", "-c", "bash -c python", stdin: "my stdin", stdout: :capture)
       system.run_command("bash", "-c", "python", stdin: "my stdin", stdout: :capture)
     end
   end
