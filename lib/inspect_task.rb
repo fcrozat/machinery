@@ -70,6 +70,8 @@ class InspectTask
     timestring = Time.now.utc.iso8601
     if system.class == LocalSystem
       host = "localhost"
+    elsif system.class == DockerSystem
+      host = system.container
     else
       host = system.host
     end

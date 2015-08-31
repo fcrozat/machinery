@@ -33,13 +33,13 @@ describe System do
     end
 
     it "returns a Docker System when docker-container switch is given" do
-      allow_any_instance_of(DockerSystem).to receive(:check_host)
+      allow_any_instance_of(DockerSystem).to receive(:check_container)
       allow_any_instance_of(DockerSystem).to receive(:check_if_container_is_running)
 
       container = System.for("c311f5336878", "root", :docker)
 
       expect(container).to be_a(DockerSystem)
-      expect(container.host).to eql("c311f5336878")
+      expect(container.container).to eql("c311f5336878")
     end
   end
 
