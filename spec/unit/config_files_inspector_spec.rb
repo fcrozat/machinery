@@ -153,20 +153,27 @@ EOF
     end
 
     describe "check requirements" do
-      before(:each) do
+
+      it "returns true if requirements are fulfilled" do
         expect(system).to receive(:check_requirement).with("rpm", "--version")
         expect(system).to receive(:check_requirement).with("stat", "--version")
         expect(system).to receive(:check_requirement).with("find", "--version")
-      end
 
-      it "returns true if requirements are fulfilled" do
         requirements_fulfilled = subject.check_requirements(false)
         expect(requirements_fulfilled).equal?(true)
       end
 
       it "returns true if requirements are fulfilled for extraction" do
-        expect(system).to receive(:check_requirement).with("rsync", "--version")
-        requirements_fulfilled = subject.check_requirements(true)
+        allow_any_instance_of(RemoteSystem).to receive(:connect)
+        remote_system = System.for("foo", "root")
+        inspector = ConfigFilesInspector.new(remote_system, description)
+
+        expect(remote_system).to receive(:check_requirement).with("rpm", "--version")
+        expect(remote_system).to receive(:check_requirement).with("stat", "--version")
+        expect(remote_system).to receive(:check_requirement).with("find", "--version")
+        expect(remote_system).to receive(:check_requirement).with("rsync", "--version")
+
+        requirements_fulfilled = inspector.check_requirements(true)
         expect(requirements_fulfilled).equal?(true)
       end
     end
