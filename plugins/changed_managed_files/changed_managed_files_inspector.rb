@@ -29,7 +29,7 @@ class ChangedManagedFilesInspector < Inspector
     if options[:extract_changed_managed_files] && system.is_a?(RemoteSystem)
       system.check_requirement("rsync", "--version")
     end
-    
+
     @system = system
 
     scope = ChangedManagedFilesScope.new

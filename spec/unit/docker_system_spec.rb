@@ -23,7 +23,6 @@ CONTAINER ID        IMAGE                     COMMAND                CREATED    
 c311f5336878        opensuse/mariadb:latest   "/bin/bash /scripts/   2 hours ago         Up 2 hours          3306/tcp            bla_db_1
 EOF
 
-
   describe "#check_container" do
     it "raises an error if container id does not exist" do
       expect(Cheetah).to receive(:run).with("docker", "ps", "-a", stdout: :capture).
