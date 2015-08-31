@@ -213,7 +213,7 @@ describe OsInspector do
     end
 
     it "adds container type to manifest.json" do
-      expect_any_instance_of(DockerSystem).to receive(:check_host)
+      expect_any_instance_of(DockerSystem).to receive(:check_container)
       expect_any_instance_of(DockerSystem).to receive(:check_if_container_is_running)
       expect_any_instance_of(DockerSystem).to receive(:arch).and_return("i586")
       expect_any_instance_of(OsInspector).to receive(:get_os).and_return(

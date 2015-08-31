@@ -16,22 +16,22 @@
 # you may find current contact information at www.suse.com
 require "cheetah"
 class DockerSystem < System
-  attr_accessor :host
+  attr_accessor :container
 
-  def initialize(host)
-    @host = host
-    check_host
+  def initialize(container)
+    @container = container
+    check_container
     check_if_container_is_running
   end
 
-  def check_host
+  def check_container
     all_container_ids = []
     running_docker_containers = Cheetah.run("docker", "ps", "-a", stdout: :capture)
     running_docker_containers.each_line do |container_id|
       all_container_ids << container_id.split(" ").first
     end
     all = all_container_ids.drop(1)
-    if all.include?(@host) == false
+    if all.include?(@container) == false
         raise Machinery::Errors::InspectionFailed.new "Can not inspect container: Invaild Container ID"
     end
   end
@@ -41,11 +41,11 @@ class DockerSystem < System
     all_containers = Cheetah.run("docker", "ps", "-a", stdout: :capture)
     all_containers.each_line do |container|
       lines << container.split(" ")
-      if container.start_with?(@host)
+      if container.start_with?(@container)
         if container.split(" ").include?("Exited")
            raise Machinery::Errors::InspectionFailed.new(
              "Container is not running currently. Start container before the" \
-             " inspection by running:\n`docker start #{@host}`"
+             " inspection by running:\n`docker start #{@container}`"
            )
          end
       end
@@ -57,33 +57,10 @@ class DockerSystem < System
   end
 
   def run_command(*args)
-    #debugger
     options = args.last.is_a?(Hash) ? args.pop : {}
 
-    # There are three valid ways how to call Cheetah.run, whose interface this
-    # method mimics. The following code ensures that the "commands" variable
-    # consistently (in all three cases) contains an array of arrays specifying
-    # commands and their arguments.
-    #
-    # See comment in Cheetah.build_commands for more detailed explanation:
-    #
-    #   https://github.com/openSUSE/cheetah/blob/0cd3f88c1210305e87dfc4852bb83040e82d783f/lib/cheetah.rb#L395
-    #
     commands = args.all? { |a| a.is_a?(Array) } ? args : [args]
 
-    # When ssh executes commands, it passes them through shell expansion. For
-    # example, compare
-    #
-    #   $ echo '$HOME'
-    #   $HOME
-    #
-    # with
-    #
-    #   $ ssh localhost echo '$HOME'
-    #   /home/dmajda
-    #
-    # To mitigate that and maintain usual Cheetah semantics, we need to protect
-    # the command and its arguments using another layer of escaping.
     escaped_commands = commands.map do |command|
       command.map { |c| Shellwords.escape(c) }
     end
@@ -99,14 +76,11 @@ class DockerSystem < System
       cheetah_class = LoggedCheetah
     end
     with_utf8_locale do
-      cheetah_class.run(*["docker", "exec", "-i", host, "bash", "-c", piped_args.compact.flatten.join(" "), options])
+      cheetah_class.run(*["docker", "exec", "-i", container, "bash", "-c", piped_args.compact.flatten.join(" "), options])
 
     end
   end
 
-  # Retrieves files specified in filelist from the local system and raises an
-  # Machinery::Errors::RsyncFailed exception when it's not successful. Destination is
-  # the directory where to put the files.
   def retrieve_files(filelist, destination)
     filelist.each do |file|
       destination_path = File.join(destination, file)
@@ -124,16 +98,6 @@ class DockerSystem < System
   rescue Errno::ENOENT
     # File not found, return nil
     return
-  end
-
-  # Copies a file to the local system
-  def inject_file(source, destination)
-    FileUtils.copy(source, destination)
-  rescue => e
-    raise Machinery::Errors::InjectFileFailed.new(
-      "Could not inject file '#{source}' to local system.\n" \
-      "Error: #{e}"
-    )
   end
 
   # Removes a file from the System

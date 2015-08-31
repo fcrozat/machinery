@@ -34,8 +34,8 @@ trigger errors.
   * `-n NAME`, `--name=NAME` (optional):
     Store the system description under the specified name.
 
-  * `-d CONTAINER_ID`, `--docker-container CONTAINER_ID` (optional):
-    Inspect a docker container.
+  * `-d`, `--docker-container` (optional):
+    Inspect a docker container. The docker container ID is specified by HOSTNAME.
 
   * `-s SCOPE`, `--scope=SCOPE` (optional):
     Inspect system for specified scope.

@@ -24,7 +24,7 @@ c311f5336878        opensuse/mariadb:latest   "/bin/bash /scripts/   2 hours ago
 EOF
 
 
-  describe "#check_host" do
+  describe "#check_container" do
     it "raises an error if container id does not exist" do
       expect(Cheetah).to receive(:run).with("docker", "ps", "-a", stdout: :capture).
         and_return(docker_ps_output)
@@ -40,7 +40,7 @@ EOF
     end
   end
 
-  describe "#check_if_host_is_running" do
+  describe "#check_if_container_is_running" do
     let(:container_not_running) { <<EOF }
 CONTAINER ID        IMAGE                     COMMAND                CREATED             STATUS                           PORTS               NAMES
 c311f5336878        opensuse/mariadb:latest   "/bin/bash /scripts/   3 hours ago         Exited (137) About an hour ago                       bla_db_1
@@ -65,7 +65,7 @@ EOF
 
   describe "#run_command" do
     it "runs the command using docker exec" do
-      allow_any_instance_of(DockerSystem).to receive(:check_host)
+      allow_any_instance_of(DockerSystem).to receive(:check_container)
       allow_any_instance_of(DockerSystem).to receive(:check_if_container_is_running)
       system = DockerSystem.new("c311f5336878")
       expect(LoggedCheetah).to receive(:run).with(
