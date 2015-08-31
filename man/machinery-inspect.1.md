@@ -34,6 +34,9 @@ trigger errors.
   * `-n NAME`, `--name=NAME` (optional):
     Store the system description under the specified name.
 
+  * `-d CONTAINER_ID`, `--docker-container CONTAINER_ID` (optional):
+    Inspect a docker container.
+
   * `-s SCOPE`, `--scope=SCOPE` (optional):
     Inspect system for specified scope.
     See the [Scope section](#Scopes) for more information.
@@ -134,3 +137,7 @@ trigger errors.
   * To inspect the remote system `myhost` with the user `machinery`:
 
     $ `machinery` inspect --remote-user machinery myhost
+
+  * To inspect a docker container run:
+
+    $ `machinery` inspect --docker-container c311f5336878
