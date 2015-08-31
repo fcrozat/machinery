@@ -26,7 +26,7 @@ class ChangedManagedFilesInspector < Inspector
 
   def inspect(filter, options = {})
     system.check_requirement("find", "--version")
-    system.check_requirement("rsync", "--version") if options[:extract_changed_managed_files]
+    system.check_requirement("rsync", "--version") if options[:extract_changed_managed_files] && system.is_a?(RemoteSystem)
 
     @system = system
 

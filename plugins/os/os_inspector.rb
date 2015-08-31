@@ -42,9 +42,11 @@ class OsInspector < Inspector
 
   def inspect(_filter, _options = {})
     @system.check_requirement("cat", "--version") if @system.is_a?(RemoteSystem)
-
     os = get_os
     if os
+      if @system.is_a?(DockerSystem)
+        os.container_type = "docker"
+      end
       os.architecture = @system.arch
       os.version += get_additional_version if os.version
     else
@@ -55,7 +57,11 @@ class OsInspector < Inspector
   end
 
   def summary
-    "Found operating system '#{@description.os.name}' version '#{@description.os.version}'."
+    summary_string = "Found operating system '#{@description.os.name}' version '#{@description.os.version}'."
+    if @system.is_a?(DockerSystem)
+      summary_string += "\n -> Inspected system is a docker container."
+    end
+    summary_string
   end
 
   private
