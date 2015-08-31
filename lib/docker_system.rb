@@ -32,7 +32,9 @@ class DockerSystem < System
     end
     all = all_container_ids.drop(1)
     if all.include?(@container) == false
-        raise Machinery::Errors::InspectionFailed.new "Can not inspect container: Invaild Container ID"
+      raise Machinery::Errors::InspectionFailed.new(
+        "Can not inspect container: Invaild Container ID"
+      )
     end
   end
 
@@ -43,11 +45,11 @@ class DockerSystem < System
       lines << container.split(" ")
       if container.start_with?(@container)
         if container.split(" ").include?("Exited")
-           raise Machinery::Errors::InspectionFailed.new(
-             "Container is not running currently. Start container before the" \
-             " inspection by running:\n`docker start #{@container}`"
-           )
-         end
+          raise Machinery::Errors::InspectionFailed.new(
+            "Container is not running currently. Start container before the" \
+            " inspection by running:\n`docker start #{@container}`"
+          )
+        end
       end
     end
   end
@@ -75,9 +77,12 @@ class DockerSystem < System
     else
       cheetah_class = LoggedCheetah
     end
-    with_utf8_locale do
-      cheetah_class.run(*["docker", "exec", "-i", container, "bash", "-c", piped_args.compact.flatten.join(" "), options])
 
+    with_utf8_locale do
+      cheetah_class.run(
+        *["docker", "exec", "-i", container, "bash", "-c",
+          piped_args.compact.flatten.join(" "), options]
+      )
     end
   end
 
