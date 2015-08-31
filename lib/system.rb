@@ -30,8 +30,10 @@ class System
   abstract_method :inject_file
   abstract_method :remove_file
 
-  def self.for(host, remote_user = "root")
-    if host && host != "localhost"
+  def self.for(host, remote_user = "root", container_type = nil)
+    if container_type == :docker
+      DockerSystem.new(host)
+    elsif host && host != "localhost"
       RemoteSystem.new(host, remote_user)
     else
       LocalSystem.new

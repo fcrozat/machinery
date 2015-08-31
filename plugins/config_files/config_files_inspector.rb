@@ -24,7 +24,7 @@ class ConfigFilesInspector < Inspector
     @system.check_requirement("rpm", "--version")
     @system.check_requirement("stat", "--version")
     @system.check_requirement("find", "--version")
-    @system.check_requirement("rsync", "--version") if check_rsync
+    @system.check_requirement("rsync", "--version") if check_rsync && system.is_a?(RemoteSystem)
   end
 
   # returns list of packages containing configfiles

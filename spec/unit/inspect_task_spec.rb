@@ -113,10 +113,11 @@ describe InspectTask, "#inspect_system" do
   end
 
   it "uses the specified remote user to access the system" do
-    expect(Inspector).to receive(:for).at_least(:once).times.with("foo").and_return(FooInspector)
-    expect(System).to receive(:for).with(anything, "machinery")
+    expect(Inspector).to receive(:for).at_least(:once).times.with("
+    foo").and_return(FooInspector)
+    expect(System).to receive(:for).with(anything, "machinery", nil)
 
-    inspect_task.inspect_system(store, host, name, current_user_non_root, ["foo"], Filter.new,
+    inspect_task.inspect_system(store, host, name, current_user_non_root, ["\n    foo"], Filter.new,
       remote_user: "machinery")
   end
 
@@ -138,6 +139,19 @@ describe InspectTask, "#inspect_system" do
       ])
     )
     expect(description.foo).to eql(expected)
+  end
+
+  it "excludes service scope if host is a container" do
+    container_description = inspect_task.inspect_system(
+      store,
+      "c311f5336878",
+      name,
+      current_user_non_root,
+      ["foo", "services", "bar"],
+      Filter.new,
+      docker_container: true
+    )
+    expect(container_description["services"]).to eq(nil)
   end
 
   describe "in case of inspection errors" do
