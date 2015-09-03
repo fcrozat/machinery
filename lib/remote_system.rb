@@ -89,20 +89,22 @@ class RemoteSystem < System
     end
   end
 
-  # Tries to run the noop-command(:) on the remote system as root (without a password or passphrase)
-  # and raises an Machinery::Errors::SshConnectionFailed exception when it's not successful.
+  # Tries to run the noop-command(:) on the remote system and raises an
+  # Machinery::Errors::SshConnectionFailed exception when it's not successful.
+  #
+  # We don't use Cheetah here because it would hang due to a bug in openssh.
+  # See: https://bugzilla.mindrot.org/show_bug.cgi?id=1988
   def connect
-    LoggedCheetah.run "ssh", *SSH_BASIC_OPTIONS, "-q", "-o", "BatchMode=yes",
-      "#{remote_user}@#{host}", ":"
-  rescue Cheetah::ExecutionFailed
-    raise Machinery::Errors::SshConnectionFailed.new(
-      "Could not establish SSH connection to host '#{host}'. Please make sure that " \
-      "you can connect non-interactively as #{remote_user}, e.g. using ssh-agent.\n\n" \
-      "To copy your default ssh key to the machine run:\n" \
-      "ssh-copy-id #{remote_user}@#{host}"
-    )
+    if !system "ssh", *SSH_BASIC_OPTIONS, "-q", "-o", "BatchMode=yes",
+      "#{Shellwords.escape(remote_user)}@#{Shellwords.escape(host)}", ":"
+      raise Machinery::Errors::SshConnectionFailed.new(
+        "Could not establish SSH connection to host '#{host}'. Please make sure that " \
+        "you can connect non-interactively as #{remote_user}, e.g. using ssh-agent.\n\n" \
+        "To copy your default ssh key to the machine run:\n" \
+        "ssh-copy-id #{remote_user}@#{host}"
+      )
+    end
   end
-
 
   # Retrieves files specified in filelist from the remote system and raises an
   # Machinery::Errors::RsyncFailed exception when it's not successful. Destination is
