@@ -26,10 +26,13 @@ describe RemoteSystem do
 
   describe "#initialize" do
     it "raises ConnectionFailed when it can't connect" do
-      expect(Cheetah).to receive(:run).with(
+      #puts "ssh -o ControlMaster=auto -o ControlPath=~/.ssh/socket%r@%h-%p -o ControlPersist=600 -q -o BatchMode=yes root@example.com :"
+      #require 'byebug'
+      #byebug
+      expect(system).to receive().with(
         "ssh", *ssh_basic_options, "-q", "-o", "BatchMode=yes", "root@example.com", ":"
-      ).and_raise(Cheetah::ExecutionFailed.new(nil, nil, nil, nil))
-
+      ).and_return(false)
+      #.and_raise(Cheetah::ExecutionFailed.new(nil, nil, nil, nil))
       expect {
         RemoteSystem.new("example.com")
       }.to raise_error(Machinery::Errors::SshConnectionFailed, /SSH/)

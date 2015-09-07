@@ -95,8 +95,8 @@ class RemoteSystem < System
   # We don't use Cheetah here because it would hang due to a bug in openssh.
   # See: https://bugzilla.mindrot.org/show_bug.cgi?id=1988
   def connect
-    if !system "ssh", *SSH_BASIC_OPTIONS, "-q", "-o", "BatchMode=yes",
-      "#{Shellwords.escape(remote_user)}@#{Shellwords.escape(host)}", ":"
+    if !system("ssh", *SSH_BASIC_OPTIONS, "-q", "-o", "BatchMode=yes",
+      "#{Shellwords.escape(remote_user)}@#{Shellwords.escape(host)}", ":")
       raise Machinery::Errors::SshConnectionFailed.new(
         "Could not establish SSH connection to host '#{host}'. Please make sure that " \
         "you can connect non-interactively as #{remote_user}, e.g. using ssh-agent.\n\n" \
