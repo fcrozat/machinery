@@ -1,10 +1,17 @@
 # Machinery Release Notes
 
+* Speed up inspection by reusing the ssh connection between remote commands
+* Export of autoyast files is now possible with system descriptions,
+  which have empty repository scopes (gh#SUSE/machinery#1268)
+* Inspection of unmanaged-files is now also using the faster machinery-helper
+  when the files are extracted
+
+## Version 1.12.0 - Fri Sep 04 16:51:10 CEST 2015 - cschum@suse.de
+
 * The x86_64 machinery-helper is now shipped with machinery. It speeds up
   inspection of unmanaged-files when the files are not extracted
 * Fix for unmanaged-file inspector to not mark directories as unmanaged if they
   only consist managed sub directories
-* Add experimental `containerize` command
 
 ## Version 1.11.2 - Thu Jul 30 14:42:44 CEST 2015 - thardeck@suse.de
 
