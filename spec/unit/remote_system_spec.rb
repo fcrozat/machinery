@@ -19,12 +19,16 @@ require_relative "spec_helper"
 
 describe RemoteSystem do
   let(:remote_system) { RemoteSystem.new("remotehost") }
+  let(:ssh_basic_options) {
+    ["-o", "ControlMaster=auto", "-o",
+      "ControlPath=~/.ssh/socket%r@%h-%p", "-o", "ControlPersist=600"]
+  }
 
   describe "#initialize" do
     it "raises ConnectionFailed when it can't connect" do
-      expect(Cheetah).to receive(:run).with(
-        "ssh", "-q", "-o", "BatchMode=yes", "root@example.com", ":"
-      ).and_raise(Cheetah::ExecutionFailed.new(nil, nil, nil, nil))
+      expect_any_instance_of(RemoteSystem).to receive(:system).with(
+        "ssh", any_args
+      ).and_return(false)
 
       expect {
         RemoteSystem.new("example.com")
@@ -46,7 +50,7 @@ describe RemoteSystem do
     describe "#run_command" do
       it "executes commands via ssh" do
         expect(Cheetah).to receive(:run).with(
-          "ssh", "root@remotehost", "LC_ALL=en_US.utf8", "ls", "/tmp", {}
+          "ssh", *ssh_basic_options, "root@remotehost", "LC_ALL=en_US.utf8", "ls", "/tmp", {}
         )
 
         remote_system.run_command("ls", "/tmp")
@@ -54,8 +58,8 @@ describe RemoteSystem do
 
       it "executes piped commands via ssh" do
         expect(Cheetah).to receive(:run).with(
-          "ssh", "root@remotehost", "LC_ALL=en_US.utf8", "ls", "/tmp", "|", "grep", "foo",
-            "|", "wc", "-l", {}
+          "ssh", *ssh_basic_options, "root@remotehost", "LC_ALL=en_US.utf8", "ls", "/tmp", "|",
+            "grep", "foo", "|", "wc", "-l", {}
         )
 
         remote_system.run_command(["ls", "/tmp"], ["grep", "foo"], ["wc", "-l"])
@@ -76,7 +80,7 @@ describe RemoteSystem do
 
       it "adheres to the remote_user option" do
         expect(Cheetah).to receive(:run).with(
-          "ssh", "machinery@remotehost", "LC_ALL=en_US.utf8", "ls", "/tmp", {}
+          "ssh", *ssh_basic_options, "machinery@remotehost", "LC_ALL=en_US.utf8", "ls", "/tmp", {}
         )
 
         remote_system.remote_user = "machinery"
@@ -85,7 +89,7 @@ describe RemoteSystem do
 
       it "uses sudo when necessary" do
         expect(Cheetah).to receive(:run).with(
-          "ssh", "machinery@remotehost", "sudo", "-n", "LC_ALL=en_US.utf8",
+          "ssh", *ssh_basic_options, "machinery@remotehost", "sudo", "-n", "LC_ALL=en_US.utf8",
             "ls", "/tmp", privileged: true
         )
 
@@ -95,7 +99,8 @@ describe RemoteSystem do
 
       it "raises an exception if the user is not allowed to run sudo" do
         expect(Cheetah).to receive(:run).with(
-          "ssh", "machinery@remotehost", "sudo", "-n", "LC_ALL=en_US.utf8", "ls", "/tmp",
+          "ssh", *ssh_basic_options, "machinery@remotehost", "sudo", "-n", "LC_ALL=en_US.utf8",
+            "ls", "/tmp",
             privileged: true
         ).and_raise(Cheetah::ExecutionFailed.new(nil, 1, "", "sudo: a password is required"))
 
