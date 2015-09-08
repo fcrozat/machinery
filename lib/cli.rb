@@ -562,7 +562,105 @@ class Cli
     end
   end
 
+  desc "Inspect container image"
+  long_desc <<-LONGDESC
+    Inspect container image and generate system descripton from inspected data.
 
+    Multiple scopes can be passed as comma-separated list. If no specific scopes
+    are given, all scopes are inspected.
+
+    Available scopes: #{AVAILABLE_SCOPE_LIST}
+  LONGDESC
+  arg "IMAGENAME"
+  command "inspect-container" do |c|
+    supports_filtering(c)
+    c.flag [:name, :n], type: String, required: false, arg_name: "NAME",
+      desc: "Store system description under the specified name"
+    c.flag [:scope, :s], type: String, required: false,
+      desc: "Show specified scopes", arg_name: "SCOPE_LIST"
+    c.flag ["exclude-scope", :e], type: String, required: false,
+      desc: "Exclude specified scopes", arg_name: "SCOPE_LIST"
+    c.flag "skip-files", required: false, negatable: false,
+      desc: "Do not consider given files or directories during inspection. " \
+        "Either provide one file or directory name or a list of names separated by commas."
+    c.flag ["remote-user", :r], type: String, required: false, default_value: @config.remote_user,
+      desc: "Defines the user which is used to access the inspected system via SSH."\
+        "This user needs sudo access on the remote machine or be root.", arg_name: "USER"
+    c.switch ["docker", :d], required: false, negatable: false,
+      desc: "Inspect docker image"
+    c.switch ["extract-files", :x], required: false, negatable: false,
+      desc: "Extract changed configuration files and unmanaged files from inspected system"
+    c.switch "extract-changed-config-files", required: false, negatable: false,
+      desc: "Extract changed configuration files from inspected system"
+    c.switch "extract-unmanaged-files", required: false, negatable: false,
+      desc: "Extract unmanaged files from inspected system"
+    c.switch "extract-changed-managed-files", required: false, negatable: false,
+      desc: "Extract changed managed files from inspected system"
+    c.switch :show, required: false, negatable: false,
+      desc: "Print inspection result"
+    c.switch :verbose, required: false, negatable: false,
+      desc: "Display the filters which are used during inspection"
+
+    c.action do |global_options,options,args|
+      image = shift_arg(args, "IMAGENAME")
+      inspector_task = InspectTask.new
+      scope_list = process_scope_option(options[:scope], options["exclude-scope"])
+      name = options[:name] || image
+
+
+      if !scope_list.empty?
+        inspected_scopes = " for #{Machinery::Ui.internal_scope_list_to_string(scope_list)}"
+      end
+      Machinery::Ui.puts "Inspecting #{image}#{inspected_scopes}..."
+
+      inspect_options = {}
+      inspect_options[:docker_container] = true
+      if options["show"]
+        inspect_options[:show] = true
+      end
+      if options["verbose"]
+        inspect_options[:verbose] = true
+      end
+      if options["extract-files"] || options["extract-changed-config-files"]
+        inspect_options[:extract_changed_config_files] = true
+      end
+      if options["extract-files"] || options["extract-changed-managed-files"]
+        inspect_options[:extract_changed_managed_files] = true
+      end
+      if options["extract-files"] || options["extract-unmanaged-files"]
+        inspect_options[:extract_unmanaged_files] = true
+      end
+      inspect_options[:remote_user] = options["remote-user"]
+
+      filter = FilterOptionParser.parse("inspect", options)
+
+      if options["verbose"] && !filter.empty?
+        Machinery::Ui.puts "\nThe following filters are applied during inspection:"
+        Machinery::Ui.puts filter.to_array.join("\n") + "\n\n"
+      else
+        show_filter_note(scope_list, filter)
+        if scope_list.include("services")
+          Machinery::Ui.puts "Note: Inpecting containers excludes the services scope.\n\n"
+        end
+      end
+
+      inspector_task.inspect_system(
+        system_description_store,
+        image,
+        name,
+        CurrentUser.new,
+        scope_list,
+        filter,
+        inspect_options
+      )
+
+      Hint.print(:show_data, name: name)
+
+      if !options["extract-files"] || Inspector.all_scopes.count != scope_list.count
+        Hint.print(:do_complete_inspection, name: name, host: host)
+      end
+    end
+  end
 
   desc "List system descriptions"
   long_desc <<-LONGDESC
