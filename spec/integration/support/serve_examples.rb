@@ -56,9 +56,8 @@ shared_examples "serve html" do
       )
     end
 
-    it "makes the system description HTML and extracted files available at the specified port and " \
-      "checks if the port is already in use when we run that command twice" do
-
+    it "makes the system description HTML and extracted files available at the specified " \
+      "port" do
       cmd = "#{machinery_command} serve opensuse131 --port 5000"
       Thread.new do
         @machinery.run_command(cmd)
@@ -89,7 +88,7 @@ shared_examples "serve html" do
       @machinery.run_command("rm -f '#{config_tmp_file}'")
     end
 
-    it "make sure that we cannot use ports two time" do
+    it "makes sure a port can't be used twice" do
       cmd = "#{machinery_command} serve --ip 127.0.0.1 --port 5000 opensuse131"
       Thread.new do
         @machinery.run_command(cmd)
@@ -116,18 +115,22 @@ shared_examples "serve html" do
 
     it "checks for the correctness of hostnames" do
       cmd = "#{machinery_command} serve --ip blabla --port 5000 opensuse131"
-      expect(@machinery.run_command(cmd)).to fail.and have_stderr(/Cannot start server on blabla\:5000\./)
+      expect(@machinery.run_command(cmd)).to fail.and \
+        have_stderr(/Cannot start server on blabla\:5000\./)
     end
 
     it "checks if an IP-Address can be used for the web server binding" do
       # use the suse.com ip address for test
       cmd = "#{machinery_command} serve --ip 130.57.5.70 --port 5000 opensuse131"
-      expect(@machinery.run_command(cmd)).to fail.and have_stderr(/The IP\-Address 130\.57\.5\.70 is not available\. Please choose a different IP\-Address\./)
+      expect(@machinery.run_command(cmd)).to fail.and have_stderr(
+        /The IP\-Address 130\.57\.5\.70 is not available\. Please choose a different IP\-Address\./
+      )
     end
 
-    it "test the output when we use ports which needs root privileges" do
+    it "tests the output when we use ports which needs root privileges" do
       cmd = "#{machinery_command} serve --ip 127.0.0.1 --port 1023 opensuse131"
-      expect(@machinery.run_command(cmd)).to fail.and have_stderr(/You need root privileges for ports between 1 and 1023!/)
+      expect(@machinery.run_command(cmd)).to fail.and
+        have_stderr(/You need root privileges for ports between 1 and 1023!/)
     end
   end
 end
