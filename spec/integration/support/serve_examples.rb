@@ -56,8 +56,7 @@ shared_examples "serve html" do
       )
     end
 
-    it "makes the system description HTML and extracted files available at the specified " \
-      "port" do
+    it "makes the system description HTML and extracted files available at the specified port" do
       cmd = "#{machinery_command} serve opensuse131 --port 5000"
       Thread.new do
         @machinery.run_command(cmd)
