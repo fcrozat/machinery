@@ -492,8 +492,6 @@ class Cli
     c.flag ["remote-user", :r], type: String, required: false, default_value: @config.remote_user,
       desc: "Defines the user which is used to access the inspected system via SSH."\
         "This user needs sudo access on the remote machine or be root.", arg_name: "USER"
-    c.switch ["docker-container", :d], required: false, negatable: false,
-      desc: "Inspect docker container"
     c.switch ["extract-files", :x], required: false, negatable: false,
       desc: "Extract changed configuration files and unmanaged files from inspected system"
     c.switch "extract-changed-config-files", required: false, negatable: false,
@@ -535,9 +533,6 @@ class Cli
       if options["extract-files"] || options["extract-unmanaged-files"]
         inspect_options[:extract_unmanaged_files] = true
       end
-      if options["docker-container"]
-        inspect_options[:docker_container] = true
-      end
       inspect_options[:remote_user] = options["remote-user"]
 
       filter = FilterOptionParser.parse("inspect", options)
@@ -547,9 +542,6 @@ class Cli
         Machinery::Ui.puts filter.to_array.join("\n") + "\n\n"
       else
         show_filter_note(scope_list, filter)
-        if options["docker-container"]
-          Machinery::Ui.puts "Note: Inpecting containers excludes the services scope.\n\n"
-        end
       end
 
       inspector_task.inspect_system(
