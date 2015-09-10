@@ -19,4 +19,6 @@ module Machinery
 
   VERSION = "1.12.0"
 
+  REQUIRED_HELPER_VERSION = "0.0.1"
+
 end

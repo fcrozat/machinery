@@ -20,11 +20,13 @@
 class SpecTemplate
   attr_accessor   :version
   attr_accessor   :dependencies
+  attr_accessor   :required_helper_version
 
   def initialize(version, gemspec)
     @version      = version
     @gemspec      = gemspec
     @dependencies = @gemspec.runtime_dependencies
+    @required_helper_version = Machinery::REQUIRED_HELPER_VERSION
   end
 
   def build_requires(options = {})

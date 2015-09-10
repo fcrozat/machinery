@@ -66,6 +66,7 @@ BuildRequires:  rubygem(<%= require[:name] %>) <%= require[:operator] %> <%= req
 %define __requires_exclude ^rubygem
 Requires:       ruby >= 2.0
 Requires:       sudo
+Requires:       machinery-helper-x86_64 == <%= @required_helper_version %>
 Url:            http://suse.com
 Source0:        http://rubygems.org/gems/%{mod_full_name}.gem
 Source1:        %{binary_name}-rpmlintrc
