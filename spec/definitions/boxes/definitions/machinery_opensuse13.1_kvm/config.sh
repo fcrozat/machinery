@@ -61,7 +61,8 @@ UseDNS no
 #--------------------------------------
 zypper -n --gpg-auto-import-keys ar --refresh --name "Main Repository (OSS)" http://download.opensuse.org/distribution/13.1/repo/oss/ download.opensuse.org-oss
 zypper -n --gpg-auto-import-keys ar --refresh --name "Main Update Repository" http://download.opensuse.org/update/13.1/ download.opensuse.org-update
-zypper -n refresh
+zypper -n --gpg-auto-import-keys ar --refresh --name "Machinery" "http://download.opensuse.org/repositories/systemsmanagement:/machinery/openSUSE_13.1/" machinery
+zypper -n --gpg-auto-import-keys refresh
 
 #======================================
 # Umount kernel filesystems
