@@ -643,7 +643,7 @@ class Cli
         Machinery::Ui.puts filter.to_array.join("\n") + "\n\n"
       else
         show_filter_note(scope_list, filter)
-        if scope_list.include("services")
+        if scope_list.include?("services")
           Machinery::Ui.puts "Note: Inpecting containers excludes the services scope.\n\n"
         end
       end
