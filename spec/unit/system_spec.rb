@@ -33,7 +33,7 @@ describe System do
     end
 
     it "returns a Docker System when docker-container switch is given" do
-      allow_any_instance_of(DockerSystem).to receive(:check_container)
+      allow_any_instance_of(DockerSystem).to receive(:image_exist?)
       allow_any_instance_of(DockerSystem).to receive(:check_if_container_is_running)
 
       container = System.for("c311f5336878", "root", :docker)

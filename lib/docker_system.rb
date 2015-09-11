@@ -15,46 +15,59 @@
 # To contact SUSE about this file by physical or electronic mail,
 # you may find current contact information at www.suse.com
 require "cheetah"
+require "docker"
+
 class DockerSystem < System
-  attr_accessor :container
+  attr_reader :container_status
 
-  def initialize(container)
-    @container = container
-    check_container
-    check_if_container_is_running
+  def initialize(image)
+    @image = image
+    image_exist?
+    create_container_from_image
   end
 
-  def check_container
-    all_container_ids = []
-    running_docker_containers = Cheetah.run("docker", "ps", "-a", stdout: :capture)
-    running_docker_containers.each_line do |container_id|
-      all_container_ids << container_id.split(" ").first
-    end
-    all = all_container_ids.drop(1)
-    if all.include?(@container) == false
-      raise Machinery::Errors::InspectionFailed.new(
-        "Can not inspect container: Invaild Container ID"
-      )
-    end
+  def start
+    @container.start
+    @container_status = "started"
   end
 
-  def check_if_container_is_running
-    lines = []
-    all_containers = Cheetah.run("docker", "ps", "-a", stdout: :capture)
-    all_containers.each_line do |container|
-      lines << container.split(" ")
-      if container.start_with?(@container) && container.split(" ").include?("Exited")
-        raise Machinery::Errors::InspectionFailed.new(
-          "Container is not running currently. Start container before the" \
-          " inspection by running:\n`docker start #{@container}`"
-        )
-      end
-    end
+  def stop
+    @container.stop
+    @container_status = "stopped"
+  end
+
+  def kill
+    @container.kill
+    @container_status = "killed"
+  end
+
+  def run_command(*args)
+    @container.exec(args)
   end
 
   def requires_root?
     false
   end
+
+  private
+  def image_exist?
+    if !Docker::Image.exist?(@image)
+      raise Machinery::Errors::InspectionFailed.new(
+          "Can not inspect container: Invaild Image NAME or ID"
+        )
+    end
+  end
+
+  def create_container_from_image
+    @container = Docker::Container.create("Image" => "#{@image}")
+    @container_status = "created"
+  end
+end
+
+
+=begin
+
+
 
   def run_command(*args)
     options = args.last.is_a?(Hash) ? args.pop : {}
@@ -113,3 +126,4 @@ class DockerSystem < System
     )
   end
 end
+=end
