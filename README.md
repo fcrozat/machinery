@@ -17,8 +17,10 @@ For more information, [visit our website](http://machinery-project.org/).
 ## Contents
 
   * [Installation](#installation)
-    - [Development](#development)
   * [Usage](#usage)
+  * [Documentation](#documentation)
+  * [Development](#development)
+  * [Contact](#contact)
 
 ## Installation
 
