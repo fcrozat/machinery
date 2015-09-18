@@ -31,10 +31,23 @@ The easiest way to install Machinery is as an RPM from our
 [homepage](http://machinery-project.org) with
 the one-click-installer.
 
-### Development
+## Usage
+
+Machinery is a command-line tool. You can invoke it using the `bin/machinery`
+command. It accepts subcommands (similarly to `git` or `bundle`).
+
+To display a short overview of available commands and their descriptions, use
+the `help` command:
+
+    $ machinery help
+
+For more information about the commands, see
+[Machinery man page](http://machinery-project.org/manual.html).
+
+## Development
 
 The following steps are only recommended if you want to work on the Machinery
-codebase or test the latest development changes.
+codebase or test the latest development changes. Read our [Developer Documents](https://github.com/SUSE/machinery/tree/master/docs) first, before you start contributing.
 
   1. **Install Git**
 
@@ -68,20 +81,6 @@ codebase or test the latest development changes.
   5. **Done!**
 
      You can now start using Machinery by running `bin/machinery`.
-
-## Usage
-
-Machinery is a command-line tool. You can invoke it using the `bin/machinery`
-command. It accepts subcommands (similarly to `git` or `bundle`).
-
-To display a short overview of available commands and their descriptions, use
-the `help` command:
-
-    $ machinery help
-
-For more information about the commands, see
-[Machinery man page](http://machinery-project.org/manual.html).
-
 
 ## Mailing List
 
