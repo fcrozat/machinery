@@ -86,7 +86,7 @@ codebase or test the latest development changes. Read our [Developer Documents](
 
      You can now start using Machinery by running `bin/machinery`.
 
-## Mailing List
+## Contact
 
 You can subscribe to our
 [mailing list](http://lists.suse.com/mailman/listinfo/machinery)
