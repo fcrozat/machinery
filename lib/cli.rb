@@ -43,6 +43,9 @@ class Cli
   post do |global_options,command,options,args|
     if command.is_a?(GLI::Commands::Help) && !global_options[:version] && ARGV == ["help"]
 
+      Machinery::Ui.puts "\nFor more detailed information, open the man page or visit our " \
+        "wiki page: https://github.com/SUSE/machinery/wiki"
+
       Machinery::Ui.puts "\nMachinery can show hints which guide through a typical workflow."
       if @config.hints
         Machinery::Ui.puts "These hints can be switched off by " \
