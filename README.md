@@ -44,6 +44,10 @@ the `help` command:
 For more information about the commands, see
 [Machinery man page](http://machinery-project.org/manual.html).
 
+## Documentation
+* [User Documentation](http://machinery-project.org/manual.html)
+* [Developer Documentation](https://github.com/SUSE/machinery/tree/master/docs)
+
 ## Development
 
 The following steps are only recommended if you want to work on the Machinery
