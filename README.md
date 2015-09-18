@@ -80,7 +80,7 @@ the `help` command:
     $ machinery help
 
 For more information about the commands, see
-[Machinery man page](https://github.com/SUSE/machinery/tree/master/man).
+[Machinery man page](http://machinery-project.org/manual.html).
 
 
 ## Mailing List
