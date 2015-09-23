@@ -457,6 +457,10 @@ describe UnmanagedFilesInspector do
     allow_any_instance_of(MachineryHelper).to receive(:can_help?).and_return(true)
     expect_any_instance_of(MachineryHelper).to receive(:inject_helper)
     expect_any_instance_of(MachineryHelper).to receive(:remove_helper)
+    allow_any_instance_of(MachineryHelper).to receive(:get_version).and_return(
+      Machinery::EXPECTED_HELPER_VERSION
+    )
+    allow_any_instance_of(MachineryHelper).to receive(:version_supported?).and_return(true)
     expect_any_instance_of(MachineryHelper).to receive(:run_helper) do |_instance, scope|
       scope.files = UnmanagedFileList.new
     end

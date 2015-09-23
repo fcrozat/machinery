@@ -34,7 +34,11 @@ class MachineryHelper
     @system = s
     @arch = @system.arch
 
-    @local_helpers_path = "/usr/share/machinery/helpers"
+    if ENV.has_key?("MACHINERY_HELPER_PATH")
+      @local_helpers_path = ENV["MACHINERY_HELPER_PATH"]
+    else
+      @local_helpers_path = "/usr/share/machinery/helpers"
+    end
   end
 
   def local_helper_path
@@ -62,5 +66,24 @@ class MachineryHelper
 
   def remove_helper
     @system.remove_file(File.join(Machinery::REMOTE_HELPERS_PATH, "machinery-helper"))
+  end
+
+  def version_supported?(version)
+    if version == Machinery::EXPECTED_HELPER_VERSION
+      return true
+    end
+
+    false
+  end
+
+  def get_version
+    version = @system.run_command(File.join(Machinery::REMOTE_HELPERS_PATH, "machinery-helper"), \
+      "--version", stdout: :capture, stderr: STDERR)
+
+    if version =~ /^Version: [0-9\.]+$/
+      return version.match(/[0-9\.]+/)[0]
+    end
+
+    "unknown"
   end
 end

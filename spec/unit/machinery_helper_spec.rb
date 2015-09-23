@@ -7,6 +7,16 @@ describe MachineryHelper do
 
   let(:dummy_system) { double(arch: "x86_64") }
 
+  describe "#initialize" do
+    it "checks if the @local_helpers_path is set correctly when using environment variable" do
+      new_path = "/bla/bli/blub"
+      ENV["MACHINERY_HELPER_PATH"] = new_path
+
+      helper = MachineryHelper.new(dummy_system)
+      expect(helper.local_helpers_path).to eq(new_path)
+    end
+  end
+
   describe "#can_help?" do
     it "can help if helper exists" do
       helper = MachineryHelper.new(dummy_system)
@@ -77,6 +87,16 @@ describe MachineryHelper do
 
       expect(scope.files.first.name).to eq("/opt/magic/file")
       expect(scope.files.count).to eq(2)
+    end
+  end
+
+  describe "#version_supported?" do
+    it "checks if a helper version is supported or not" do
+      helper = MachineryHelper.new(dummy_system)
+
+      expect(helper.version_supported?(1)).to eq(false)
+      expect(helper.version_supported?("bla")).to eq(false)
+      expect(helper.version_supported?(Machinery::EXPECTED_HELPER_VERSION)).to eq(true)
     end
   end
 end

@@ -255,6 +255,7 @@ class UnmanagedFilesInspector < Inspector
         "Note: Using traditional inspection because only 'root' is supported as remote user."
       )
     else
+      Machinery::Ui.puts("Note: Using helper binary for inspection of unmanaged files.")
       return true
     end
 
@@ -264,7 +265,15 @@ class UnmanagedFilesInspector < Inspector
   def run_helper_inspection(helper, filter, do_extract, file_store_tmp, file_store_final, scope)
     begin
       helper.inject_helper
-      helper.run_helper(scope)
+      version = helper.get_version
+
+      if !helper.version_supported?(version)
+        raise Machinery::Errors::UnsupportedHelperVersion.new("Error: machinery-helper version " \
+          "'#{version}' is not supported by this Machinery version. Expected " \
+          "version: #{Machinery::EXPECTED_HELPER_VERSION}")
+      else
+        helper.run_helper(scope)
+      end
     ensure
       helper.remove_helper
     end

@@ -18,5 +18,6 @@
 module Machinery
 
   VERSION = "1.13.0"
+  EXPECTED_HELPER_VERSION = "0.1.0"
 
 end
