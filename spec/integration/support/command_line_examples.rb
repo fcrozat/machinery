@@ -102,9 +102,21 @@ shared_examples "CLI" do
           as: "vagrant")
       end
 
+      let(:machinery_config) {
+        {   
+          #http_server_port: "1",
+          machinery_dir: "/tmp/test"
+        }   
+      }
+        env: {
+        "MACHINERY_DIR" => machinery_config[:machinery_dir]
+      }
+
+
       it "checks if a port gets validated" do
+        puts "#{machinery_config}"
         expect(@machinery.run_command("#{machinery_command} compare description1 description2 " \
-          "--port=1 --html", as: "vagrant")).to fail.and include_stderr(
+          "--html", as: "vagrant")).to fail.and include_stdout(
             "Please choose a port between 2 and 65535."
           )
       end

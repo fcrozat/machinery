@@ -139,5 +139,13 @@ module Machinery
     class InjectFileFailed < MachineryError; end
     class UnexpectedInputData < MachineryError; end
     class ComposeServiceLink < MachineryError; end
+
+    class ServerPortError < MachineryError
+      attr_reader :message
+
+      def initialize(message)
+        @message = message
+      end
+    end
   end
 end
