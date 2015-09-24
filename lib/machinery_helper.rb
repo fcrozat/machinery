@@ -69,7 +69,15 @@ class MachineryHelper
   end
 
   def version_supported?(version)
+    version = version.to_s
     if version == Machinery::EXPECTED_HELPER_VERSION
+      return true
+    end
+
+    version = version[/(\d+\.\d+\.\d+)/]
+    version_e = Machinery::EXPECTED_HELPER_VERSION[/(\d+\.\d+\.\d+)/]
+
+    if version == version_e
       return true
     end
 

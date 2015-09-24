@@ -97,6 +97,8 @@ describe MachineryHelper do
       expect(helper.version_supported?(1)).to eq(false)
       expect(helper.version_supported?("bla")).to eq(false)
       expect(helper.version_supported?(Machinery::EXPECTED_HELPER_VERSION)).to eq(true)
+      expect(helper.version_supported?(Machinery::EXPECTED_HELPER_VERSION + ".abc131.test")).to eq(true)
+      expect(helper.version_supported?(Machinery::EXPECTED_HELPER_VERSION + ".11")).to eq(true)
     end
   end
 end
