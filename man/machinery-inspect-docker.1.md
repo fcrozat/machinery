@@ -10,7 +10,7 @@
 
 ### DESCRIPTION
 
-The `inspect-container` command inspects a container image by creating, starting and inspecting a container from the provided image
+The `inspect-container` command analysis a container image by creating, starting and inspecting a container from the provided image
 and generates a system description from the gathered data. After the inspection the container will be killed and removed again.
 This approach ensures that no containers and images are affected by the inspection.
 
