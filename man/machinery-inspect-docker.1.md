@@ -16,6 +16,8 @@ The `inspect-container` command analysis a container image by creating, starting
 and generates a system description from the gathered data. After the inspection the container will be killed and removed again.
 This approach ensures that no containers and images are affected by the inspection.
 
+Right now we support only images from the type `docker`, which is set as default.
+
 The system data is structured into scopes, controlled by the
 `--scope` option.
 
@@ -33,9 +35,6 @@ trigger errors.
 
 
 ### OPTIONS
-
-  * `-d`, `--docker` (optional):
-    Defines the type of the image to be inspected as docker image.
 
   * `-n NAME`, `--name=NAME` (optional):
     Store the system description under the specified name.
@@ -68,11 +67,11 @@ trigger errors.
     also point to a file which contains a list of files to filter (one per line)
     by adding an '@' before the path, e.g.
 
-      $ `machinery` inspect-container --docker --skip-files=@/path/to/filter_file myhost
+      $ `machinery` inspect-container --skip-files=@/path/to/filter_file myhost
 
     If a filename contains a comma it needs to be escaped, e.g.
 
-      $ `machinery` inspect-container --docker --skip-files=/file\\,with_comma myhost
+      $ `machinery` inspect-container --skip-files=/file\\,with_comma myhost
 
     **Note**: File or directory names are not expanded, e.g. '../path' is taken
       literally and not expanded.
@@ -99,12 +98,12 @@ trigger errors.
 
   * Inspect docker-container `myhost` and save system description under name 'MySystem':
     
-    $ `machinery` inspect-container --docker --name=MySystem myhost
+    $ `machinery` inspect-container --name=MySystem myhost
 
   * Inspect docker-container `076f46c1bef1` and save system description under name 'MySecondSystem':
 
-    $ `machinery` inspect-container --docker --name=MySecondSystem 076f46c1bef1
+    $ `machinery` inspect-container --name=MySecondSystem 076f46c1bef1
 
   * Extracts changed managed files and saves them:
 
-    $ `machinery` inspect-container --docker --scope=changed-managed-files --extract-files myhost
+    $ `machinery` inspect-container --scope=changed-managed-files --extract-files myhost

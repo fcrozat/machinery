@@ -618,6 +618,7 @@ class Cli
   desc "Inspect container image"
   long_desc <<-LONGDESC
     Inspect container image and generate system descripton from inspected data.
+    Right now we only support docker images. Further types will be supported in the future as well.
 
     Multiple scopes can be passed as comma-separated list. If no specific scopes
     are given, all scopes are inspected.
@@ -628,8 +629,6 @@ class Cli
   command "inspect-container" do |c|
     supports_filtering(c)
     define_inspect_command_options(c)
-    c.switch ["docker", :d], required: true, negatable: false,
-      desc: "Inspect a docker container"
 
     c.action do |_global_options, options, args|
       image = shift_arg(args, "<IMAGENAME|IMAGEID>")
