@@ -95,15 +95,13 @@ trigger errors.
 
 ### EXAMPLES
 
-  * Inspect docker-container `myhost` / `076f46c1bef1` and save system description under name
-    'MySystem':
+  * Inspect docker-container `myhost` and save system description under name 'MySystem':
     
-    * Using the image name of the container
     $ `machinery` inspect-container --docker --name=MySystem myhost
-    
-    * Using the image id of the container
-    $ `machinery` inspect-container --docker --name=MySystem 076f46c1bef1
 
+  * Inspect docker-container `076f46c1bef1` and save system description under name 'MySecondSystem':
+
+    $ `machinery` inspect-container --docker --name=MySecondSystem 076f46c1bef1
 
   * Extracts changed managed files and saves them in the same way as changed
     configuration files are saved:
