@@ -1,5 +1,5 @@
 
-## inspect — Inspect Running System
+## inspect-container — Inspect Container
 
 ### SYNOPSIS
 
@@ -70,7 +70,7 @@ trigger errors.
 
     If a filename contains a comma it needs to be escaped, e.g.
 
-      $ `machinery` inspect --skip-files=/file\\,with_comma myhost
+      $ `machinery` inspect-container --docker --skip-files=/file\\,with_comma myhost
 
     **Note**: File or directory names are not expanded, e.g. '../path' is taken
       literally and not expanded.
