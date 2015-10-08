@@ -103,7 +103,6 @@ trigger errors.
 
     $ `machinery` inspect-container --docker --name=MySecondSystem 076f46c1bef1
 
-  * Extracts changed managed files and saves them in the same way as changed
-    configuration files are saved:
+  * Extracts changed managed files and saves them:
 
     $ `machinery` inspect-container --docker --scope=changed-managed-files --extract-files myhost
