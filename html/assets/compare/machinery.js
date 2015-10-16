@@ -55,6 +55,7 @@ $(document).ready(function () {
   // Show or hide elements which are common in scope
   $(".show-common-elements").click(function(){
     $scope = $(this).closest(".scope");
+    $scope.find(".scope_content").collapse("show");
     $scope.find(".scope_common_content").collapse("show");
     $scope.find(".scope_content").find(".show-common-elements").hide();
     $scope.find(".hide-common-elements").show();
