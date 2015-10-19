@@ -46,12 +46,19 @@ RSpec::Steps.steps "Comparing two system descriptions in HTML format", type: :fe
   end
 
   it "expands a collapsed scope if both is clicked" do
+save_screenshot("/tmp/1.png")
+    find(:xpath, "//a[contains(@title, 'Packages')]").click
+    save_screenshot("/tmp/2.png")
+
     within("#groups_container") do
       find(".toggle").click
+      sleep 2
       expect(page).to have_no_selector(".hide-common-elements")
+      save_screenshot("/tmp/3.png")
 
       find(".show-common-elements").click
       expect(page).to have_selector(".hide-common-elements", visible: true)
+      save_screenshot("/tmp/4.png")
     end
   end
 end

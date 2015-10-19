@@ -35,9 +35,14 @@ require "capybara/poltergeist"
 require "phantomjs/poltergeist"
 require "tilt/haml"
 
+  Capybara.register_driver :poltergeist_debug do |app|
+    Capybara::Poltergeist::Driver.new(app, :inspector => true)
+  end
+
 Capybara.configure do |config|
   Server.set :public_folder, File.join(Machinery::ROOT, "html")
   config.app = Server
 
-  config.default_driver = :poltergeist
+  Capybara.default_driver = :poltergeist
+  #Capybara.default_driver = :poltergeist_debug
 end
