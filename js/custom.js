@@ -3,6 +3,23 @@
  * n {Number} - from what letter to start
  */
 
+// rotate gears on top and bottom of the site
+function gearRotation() {
+  var bodyHeight = $(window).height();
+  var deg = -window.scrollY*(140/bodyHeight);
+  var deg2 = -window.scrollY*(-140/bodyHeight);
+  var deg3 = -window.scrollY*(80/bodyHeight);
+
+  $(".gear").css({
+    "transform": "rotate(" + deg + "deg)",
+  });
+  $(".gear2").css({
+    "transform": "rotate(" + deg2 + "deg)",
+  });
+  $(".gear3").css({
+    "transform": "rotate(" + deg3 + "deg)",
+  });
+}
 
 $(document).ready(function(){
   
@@ -13,6 +30,8 @@ $(document).ready(function(){
     } else {
       $('.scrollToTop').fadeOut();
     }
+
+    gearRotation(); 
   });
   
   //Click event to scroll to top
@@ -144,5 +163,19 @@ $(document).on("ready", function(){
 })
 
 
+//$(document).ready(function(){
+//  // $(window).scroll(function(){
+//   var bodyHeight = $("body").height()-$(window).height();
+//   window.onscroll = function() {
 
+//      //Determine the amount to rotate by.
+//      var deg = -window.scrollY*(360/bodyHeight);
+
+//      $(".gear").css({
+//        "transform": "rotate(100deg)",
+//      });
+
+//   };
+//// });
+//});
 

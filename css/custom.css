@@ -368,7 +368,7 @@ font-size: 16px;
 @media (max-width: 600px) {
   .headline {
     font-family: 'Special Elite', cursive;
-    font-size: 4.2em;
+    font-size: 4em;
     margin: 100px 0px 0px 0px;
     color: #3c3935;
   }
@@ -552,6 +552,8 @@ font-size: 16px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  position: absolute;
+  z-index: 100;
 }
 
 .properties {
