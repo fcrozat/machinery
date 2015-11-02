@@ -589,10 +589,14 @@ class Cli
     c.flag ["remote-user", :r], type: String, required: false, default_value: @config.remote_user,
       desc: "Defines the user which is used to access the inspected system via SSH."\
         "This user needs sudo access on the remote machine or be root.", arg_name: "USER"
+    c.flag ["port", :p], type: Integer, required: false,
+      default_value: 22,
+      desc: "Specifies the remote SSH server port. Default: 22",
+        arg_name: "PORT"
 
     c.action do |_global_options, options, args|
       host = shift_arg(args, "HOSTNAME")
-      system = System.for(host, options["remote-user"])
+      system = System.for(host, options["remote-user"], options["port"])
       inspector_task = InspectTask.new
 
       name, scope_list, inspect_options, filter = parse_inspect_command_options(host, options)
