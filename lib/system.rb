@@ -21,6 +21,7 @@
 # It abstracts common inspection tasks that need to be run, like executing
 # commands or running "kiwi --describe". Different implementations, e.g. for
 # local or ssh-accessed systems are done in the according subclasses.
+
 class System
   abstract_method :requires_root?
   abstract_method :run_command
@@ -74,12 +75,28 @@ class System
     )
     created = !File.exists?(archive)
     out = File.open(archive, "w")
+
+    stdin_input = []
+    Array(file_list).each do |file|
+      output = ""
+
+      file.each_byte do |byte|
+        if byte == 92 # backslash
+          output += "\\" + byte.chr
+        else
+          output += byte.chr
+        end
+      end
+
+      stdin_input.push(output)
+    end
+
     begin
       run_command(
         "tar", "--create", "--gzip", "--null", "--files-from=-",
         *exclude.flat_map { |f| ["--exclude", f]},
         stdout: out,
-        stdin: Array(file_list).join("\0"),
+        stdin: Array(stdin_input).join("\0"),
         privileged: true,
         disable_logging: true
       )
