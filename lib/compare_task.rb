@@ -70,9 +70,9 @@ EOF
         identical = false if description1[scope] || description2[scope]
       end
     end
-    output = "Compared descriptions are identical.\n" + output if identical && common_scopes
-
-    if !identical_scopes.empty?
+    if identical && common_scopes
+      output = "Compared descriptions are identical.\n" + output
+    elsif !identical_scopes.empty?
       phrase = Machinery::pluralize(identical_scopes.count, "scope is", "scopes are")
       output += "Following #{phrase} identical in both descriptions: " + identical_scopes.join(",")
     end
