@@ -71,7 +71,8 @@ EOF
       end
     end
     if identical && common_scopes
-      output = "Compared descriptions are identical.\n" + output
+      output = "\n" + output if !output.empty?
+      output = "Compared descriptions are identical." + output
     elsif !identical_scopes.empty?
       phrase = Machinery::pluralize(identical_scopes.count, "scope is", "scopes are")
       output += "Following #{phrase} identical in both descriptions: " + identical_scopes.join(",")

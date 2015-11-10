@@ -371,7 +371,7 @@ EOT
       output = CompareTask.new.render_comparison(system_description1,
         system_description2, ["os"])
 
-      expect(output).to include ("Compared descriptions are identical.\n")
+      expect(output).to include ("Compared descriptions are identical.")
     end
   end
 
