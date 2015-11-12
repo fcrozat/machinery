@@ -166,7 +166,7 @@ class RpmDatabase
     out = @system.run_command(
       "stat", "--printf", "%a:%U:%G:%u:%g:%F:%n\\n",
       *cur_files,
-      stdout: :capture
+      stdout: :capture,
       privileged: true
     )
     out.each_line do |l|
