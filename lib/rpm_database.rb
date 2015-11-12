@@ -167,6 +167,7 @@ class RpmDatabase
       "stat", "--printf", "%a:%U:%G:%u:%g:%F:%n\\n",
       *cur_files,
       stdout: :capture
+      privileged: true
     )
     out.each_line do |l|
       path, values       = parse_stat_line(l)
