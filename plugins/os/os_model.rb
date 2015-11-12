@@ -132,6 +132,20 @@ class OsSles11 < OsSuse
   end
 end
 
+class OsSled12 < OsSuse
+  def self.canonical_name
+    "SUSE Linux Enterprise Desktop 12"
+  end
+
+  def self.buildable_systems
+    [OsSled12]
+  end
+
+  def display_name
+    "#{name} (#{architecture})"
+  end
+end
+
 class OsSles12 < OsSuse
   def self.canonical_name
     "SUSE Linux Enterprise Server 12"

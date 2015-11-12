@@ -230,6 +230,8 @@ class SystemDescription < Machinery::Object
     assert_scopes("os")
 
     case self.os.name
+      when /^SUSE Linux Enterprise Desktop/
+        "sled" + self.os.version[/\d+( SP\d+)*/].gsub(" ", "").downcase
       when /^SUSE Linux Enterprise Server/
         "sles" + self.os.version[/\d+( SP\d+)*/].gsub(" ", "").downcase
       when /^openSUSE/

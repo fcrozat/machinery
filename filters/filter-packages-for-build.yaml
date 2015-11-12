@@ -6,3 +6,6 @@
 "SUSE Linux Enterprise Server 12":
   - sle-sdk-release-DVD
   - sles-release-DVD
+"SUSE Linux Enterprise Desktop 12":
+  - sle-sdk-release-DVD
+  - sled-release-DVD
