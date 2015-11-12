@@ -77,5 +77,15 @@ EOF
         )
       ).to succeed.and have_stdout(expected_content)
     end
+
+    it "makes sure that the user is able to call the `stat` command with sudo privileges" do
+      require 'byebug'
+      byebug
+      @subject_system.run_command("chmod", "400", "/etc/umlaut-äöü.conf")
+      expect(@machinery.run_command("#{machinery_command} inspect #{@subject_system.ip} -r " \
+        "machinery -s config-files -x", as: "vagrant")).to succeed
+    end
   end
 end
+
+@machinery.run_command("#{machinery_command} inspect #{@subject_system.ip} -r machinery -s config-files -x", as: "machinery")
